@@ -6,7 +6,7 @@ import Home from './components/Home';
 function App() {
   return (
     <div>
-      <Header />
+      <Header title="Brandon's Code Cafe" />
       <Home items={items} />
     </div>
   );
