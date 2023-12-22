@@ -9,7 +9,7 @@ function Home({ items }) {
     <div className="home-component">
       {
         items.map((item) => (
-          <Thumbnail key={item.itemId} image={[itemImages[item.imageId]]} title={item.title} />
+          <Thumbnail key={item.itemId} image={itemImages[item.imageId]} title={item.title} />
         ))
       }
     </div>
