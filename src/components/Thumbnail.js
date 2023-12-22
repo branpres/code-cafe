@@ -1,18 +1,23 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import './Thumbnail.css';
 
-function Thumbnail({ image, title }) {
+function Thumbnail({ itemId, image, title }) {
   return (
-    <a href="#todo" className="thumbnail-component">
+    <Link
+      className="thumbnail-component"
+      to={`/details/${itemId}`}
+    >
       <div>
         <img src={image} alt={title} />
       </div>
       <p>{title}</p>
-    </a>
+    </Link>
   );
 }
 
 Thumbnail.propTypes = {
+  itemId: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };
