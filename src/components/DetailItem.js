@@ -4,9 +4,13 @@ import './DetailItem.css';
 import ItemType from '../types/item';
 import { itemImages } from '../items';
 
-function DetailItem({ items }) {
+function DetailItem({ items, addToCart }) {
   const { id } = useParams();
   const detailItem = items.find((item) => item.itemId === id);
+
+  const addItemToCart = () => {
+    addToCart(detailItem.itemId);
+  };
 
   return (
     <div className="detail-item-component">
@@ -21,6 +25,7 @@ function DetailItem({ items }) {
               $
               {(detailItem.salePrice ?? detailItem.price).toFixed(2)}
             </div>
+            <button type="button" onClick={addItemToCart}>Add to Cart</button>
           </>
         )
         : <h2>Unknown Item</h2>}
@@ -30,6 +35,7 @@ function DetailItem({ items }) {
 
 DetailItem.propTypes = {
   items: PropTypes.arrayOf(ItemType).isRequired,
+  addToCart: PropTypes.func.isRequired,
 };
 
 export default DetailItem;
