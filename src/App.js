@@ -21,17 +21,21 @@ function App() {
   return (
     <Router>
       <Header title="Brandon's Code Cafe" />
-      <Routes>
-        <Route path="/" element={<Home items={items} />} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="/details" element={<Details items={items} />}>
-          <Route path=":id" element={<DetailItem />} />
-          <Route index element={<div>No Item Selected</div>} />
-        </Route>
-        <Route path="/rewards" element={<Rewards />}>
-          <Route path=":tier" element={<RewardsItem />} />
-        </Route>
-      </Routes>
+      {items.length === 0
+        ? <div>Loading...</div>
+        : (
+          <Routes>
+            <Route path="/" element={<Home items={items} />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/details" element={<Details items={items} />}>
+              <Route path=":id" element={<DetailItem items={items} />} />
+              <Route index element={<div>No Item Selected</div>} />
+            </Route>
+            <Route path="/rewards" element={<Rewards />}>
+              <Route path=":tier" element={<RewardsItem />} />
+            </Route>
+          </Routes>
+        )}
     </Router>
   );
 }
