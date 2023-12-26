@@ -6,6 +6,8 @@ import Home from './components/Home';
 import NotFound from './components/NotFound';
 import Details from './components/Details';
 import DetailItem from './components/DetailItem';
+import Rewards from './components/Rewards';
+import RewardsItem from './components/RewardsItem';
 
 function App() {
   const [items, setItems] = useState([]);
@@ -25,6 +27,9 @@ function App() {
         <Route path="/details" element={<Details items={items} />}>
           <Route path=":id" element={<DetailItem />} />
           <Route index element={<div>No Item Selected</div>} />
+        </Route>
+        <Route path="/rewards" element={<Rewards />}>
+          <Route path=":tier" element={<RewardsItem />} />
         </Route>
       </Routes>
     </Router>
