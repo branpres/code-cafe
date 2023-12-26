@@ -8,6 +8,7 @@ import Details from './components/Details';
 import DetailItem from './components/DetailItem';
 import Rewards from './components/Rewards';
 import RewardsItem from './components/RewardsItem';
+import RewardsLink from './components/RewardsLink';
 
 function App() {
   const [items, setItems] = useState([]);
@@ -21,6 +22,7 @@ function App() {
   return (
     <Router>
       <Header title="Brandon's Code Cafe" />
+      <RewardsLink />
       {items.length === 0
         ? <div>Loading...</div>
         : (

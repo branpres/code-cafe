@@ -13,11 +13,13 @@ function DetailItem({ items }) {
       {detailItem
         ? (
           <>
+            {(detailItem.salePrice || detailItem.salePrice === 0) && <div>On sale!</div>}
             <img className="details-image" src={itemImages[detailItem.imageId]} alt={detailItem.title} />
             <h2>{detailItem.title}</h2>
+            {!!detailItem.description && <h6>{detailItem.description}</h6>}
             <div>
               $
-              {detailItem.price.toFixed(2)}
+              {(detailItem.salePrice ?? detailItem.price).toFixed(2)}
             </div>
           </>
         )

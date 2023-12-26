@@ -14,18 +14,10 @@
   background-color: #3F3F40;
 }
 
-.rewards-link {
-  margin-left: 20px;
-}
-
 @media (min-width: 768px) {
   .home-component {
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       padding: 40px 50px;
       grid-gap: 40px 15px;
-  }
-
-  .rewards-link {
-    margin-left: 50px;
   }
 }
