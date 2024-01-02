@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Logo from '../images/logo.svg';
 import CartIcon from '../images/cart.svg';
 import './Header.css';
+import RewardsLink from './RewardsLink';
 
 function Header({ title, cart }) {
   const cartQuantity = cart.reduce((accumulator, item) => accumulator + item.quantity, 0);
@@ -14,7 +15,8 @@ function Header({ title, cart }) {
         <h1>{title}</h1>
       </Link>
       <div className="menu">
-        <Link to="#todo">
+        <RewardsLink />
+        <Link to="/cart">
           <img src={CartIcon} alt="Cart" />
           <div className="badge">{cartQuantity}</div>
         </Link>

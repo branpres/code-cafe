@@ -8,7 +8,7 @@ import Details from './components/Details';
 import DetailItem from './components/DetailItem';
 import Rewards from './components/Rewards';
 import RewardsItem from './components/RewardsItem';
-import RewardsLink from './components/RewardsLink';
+import Cart from './components/Cart';
 import { initialCartState, cartReducer, CartTypes } from './reducers/cartReducer';
 
 function App() {
@@ -25,7 +25,6 @@ function App() {
   return (
     <Router>
       <Header title="Brandon's Code Cafe" cart={cart} />
-      <RewardsLink />
       {items.length === 0
         ? <div>Loading...</div>
         : (
@@ -39,6 +38,7 @@ function App() {
             <Route path="/rewards" element={<Rewards />}>
               <Route path=":tier" element={<RewardsItem />} />
             </Route>
+            <Route path="/cart" element={<Cart cart={cart} items={items} dispatch={dispatch} />} />
           </Routes>
         )}
     </Router>
