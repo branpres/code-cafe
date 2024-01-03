@@ -5,6 +5,8 @@ import { CartTypes } from '../reducers/cartReducer';
 function CartRow({ cartItem, items, dispatch }) {
   const item = items.find((i) => i.itemId === cartItem.itemId);
 
+  const increaseItemQuantityInCart = () => dispatch({ type: CartTypes.ADD, itemId: item.itemId });
+  const decreaseItemQuantityInCart = () => dispatch({ type: CartTypes.DECREASE, itemId: item.itemId });
   const removeItemFromCart = () => dispatch({ type: CartTypes.REMOVE, itemId: item.itemId });
 
   return (
@@ -15,9 +17,9 @@ function CartRow({ cartItem, items, dispatch }) {
         $
         {((item.salePrice ?? item.price) * cartItem.quantity).toFixed(2)}
       </td>
-      <td>
-        <button type="button" onClick={removeItemFromCart}>X</button>
-      </td>
+      <td><button type="button" onClick={increaseItemQuantityInCart}>+</button></td>
+      <td><button type="button" onClick={decreaseItemQuantityInCart}>-</button></td>
+      <td><button type="button" onClick={removeItemFromCart}>X</button></td>
     </tr>
   );
 }
