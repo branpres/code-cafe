@@ -11,9 +11,25 @@ import RewardsItem from './components/RewardsItem';
 import Cart from './components/Cart';
 import { initialCartState, cartReducer, CartTypes } from './reducers/cartReducer';
 
+const storageKey = 'cart';
+
 function App() {
   const [items, setItems] = useState([]);
-  const [cart, dispatch] = useReducer(cartReducer, initialCartState);
+  const [cart, dispatch] = useReducer(
+    cartReducer,
+    initialCartState,
+    (initialState) => {
+      const storedCartJson = localStorage.getItem(storageKey);
+      if (storedCartJson !== null) {
+        try {
+          return JSON.parse(storedCartJson);
+        } catch (error) {
+          console.log('Error parsing cart', error);
+        }
+      }
+      return initialState;
+    },
+  );
   const addToCart = (itemId) => dispatch({ type: CartTypes.ADD, itemId });
 
   useEffect(() => {
@@ -21,6 +37,10 @@ function App() {
       .then((result) => setItems(result.data))
       .catch(console.error);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(cart));
+  }, [cart]);
 
   return (
     <Router>

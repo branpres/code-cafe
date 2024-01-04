@@ -26,9 +26,6 @@ function Cart({ cart, items, dispatch }) {
 
   const submitOrder = (e) => {
     e.preventDefault();
-    console.log('name:', name);
-    console.log('phone', phone);
-    console.log('zipcode:', zipcode);
   };
 
   return (
@@ -80,7 +77,7 @@ function Cart({ cart, items, dispatch }) {
               </label>
               <label htmlFor="phone">
                 Phone Number
-                <PatternFormat id="phone" displayType="input" type="tel" format="###-###-####" onValueChange={(values) => setPhone(values.formattedValue)} />
+                <PatternFormat id="phone" displayType="input" type="tel" format="###-###-####" value={phone} onValueChange={(values) => setPhone(values.formattedValue)} />
               </label>
               <label htmlFor="zipcode">
                 ZIP Code
