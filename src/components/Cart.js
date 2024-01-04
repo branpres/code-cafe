@@ -41,7 +41,7 @@ function Cart({ cart, items, dispatch }) {
             <table>
               <thead>
                 <tr>
-                  <th>Quantity</th>
+                  <th id="qty-lbl">Quantity</th>
                   <th>Item</th>
                   <th>Price</th>
                 </tr>

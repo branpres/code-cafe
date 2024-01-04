@@ -8,10 +8,13 @@ function CartRow({ cartItem, items, dispatch }) {
   const increaseItemQuantityInCart = () => dispatch({ type: CartTypes.ADD, itemId: item.itemId });
   const decreaseItemQuantityInCart = () => dispatch({ type: CartTypes.DECREASE, itemId: item.itemId });
   const removeItemFromCart = () => dispatch({ type: CartTypes.REMOVE, itemId: item.itemId });
+  const setItemQuantityInCart = (e) => dispatch({ type: CartTypes.SET, itemId: item.itemId, quantity: Number(e.target.value) });
 
   return (
     <tr>
-      <td>{cartItem.quantity}</td>
+      <td>
+        <input type="number" aria-labelledby="qty-lbl" min="0" value={cartItem.quantity} onChange={setItemQuantityInCart} />
+      </td>
       <td>{item.title}</td>
       <td>
         $

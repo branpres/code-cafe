@@ -4,6 +4,7 @@ export const CartTypes = {
   ADD: 'add',
   REMOVE: 'remove',
   DECREASE: 'decrease',
+  SET: 'set',
 };
 
 const findItem = (cart, itemId) => cart.find((item) => item.itemId === itemId);
@@ -31,6 +32,16 @@ export const cartReducer = (state, action) => {
       return state.map((item) => (
         item.itemId === action.itemId
           ? { ...item, quantity: item.quantity - 1 }
+          : item
+      ));
+    case CartTypes.SET:
+      if (action.quantity === 0) {
+        return removeItem(state, action.itemId);
+      }
+
+      return state.map((item) => (
+        item.itemId === action.itemId
+          ? { ...item, quantity: action.quantity }
           : item
       ));
     default:
