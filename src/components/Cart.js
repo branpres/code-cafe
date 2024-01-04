@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { PatternFormat } from 'react-number-format';
 import ItemType from '../types/item';
 import './Cart.css';
 import CartRow from './CartRow';
@@ -9,22 +10,6 @@ function Cart({ cart, items, dispatch }) {
   const [phone, setPhone] = useState('');
   const [zipcode, setZipcode] = useState('');
   const [couponCode, setCouponCode] = useState('');
-
-  const setFormattedPhone = (newPhone) => {
-    const digits = newPhone.replace(/\D/g, '');
-    let formatted = digits.substring(0, 3);
-    if (digits.length === 3 && newPhone[3] === '-') {
-      formatted = `${formatted}-`;
-    } else if (digits.length > 3) {
-      formatted = `${formatted}-${digits.substring(3, 6)}`;
-    }
-    if (digits.length === 6 && newPhone[7] === '-') {
-      formatted = `${formatted}-`;
-    } else if (digits.length > 6) {
-      formatted = `${formatted}-${digits.substring(6, 10)}`;
-    }
-    setPhone(formatted);
-  };
 
   const setFormattedCouponCode = (newCouponCode) => {
     setCouponCode(newCouponCode.toUpperCase());
@@ -95,7 +80,7 @@ function Cart({ cart, items, dispatch }) {
               </label>
               <label htmlFor="phone">
                 Phone Number
-                <input type="tel" id="phone" value={phone} onChange={(e) => setFormattedPhone(e.target.value)} />
+                <PatternFormat id="phone" displayType="input" type="tel" format="###-###-####" onValueChange={(values) => setPhone(values.formattedValue)} />
               </label>
               <label htmlFor="zipcode">
                 ZIP Code
