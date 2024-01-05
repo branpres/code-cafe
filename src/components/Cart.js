@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { PatternFormat } from 'react-number-format';
+import axios from 'axios';
 import ItemType from '../types/item';
 import './Cart.css';
 import CartRow from './CartRow';
@@ -10,16 +11,45 @@ function Cart({ cart, items, dispatch }) {
   const [phone, setPhone] = useState('');
   const [zipcode, setZipcode] = useState('');
   const [couponCode, setCouponCode] = useState('');
+  const [isEmployeeOfTheMonth, setIsEmployeeOfTheMonth] = useState(false);
+  const debounceRef = useRef(null);
+  const zipcodeRef = useRef(null);
 
-  const setFormattedCouponCode = (newCouponCode) => {
+  const onPhoneChange = (newPhone) => {
+    setPhone(newPhone);
+
+    const phoneDigits = newPhone.trim().replaceAll('-', '').replaceAll(' ', '');
+    if (phoneDigits.length === 10) {
+      zipcodeRef.current.focus();
+    }
+  };
+
+  const onCouponCodeChange = (newCouponCode) => {
     setCouponCode(newCouponCode.toUpperCase());
   };
 
-  const subTotal = cart.reduce((acc, item) => {
-    const detailItem = items.find((i) => i.itemId === item.itemId);
-    const itemPrice = detailItem.salePrice ?? detailItem.price;
-    return item.quantity * itemPrice + acc;
-  }, 0);
+  const onNameChange = (newName) => {
+    setName(newName);
+
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(() => {
+      axios
+        .get(`/api/employees/isEmployeeOfTheMonth?name=${newName}`)
+        .then((response) => setIsEmployeeOfTheMonth(response?.data?.isEmployeeOfTheMonth))
+        .catch(console.error);
+    }, 300);
+  };
+
+  const subTotal = isEmployeeOfTheMonth
+    ? 0
+    : cart.reduce((acc, item) => {
+      const detailItem = items.find((i) => i.itemId === item.itemId);
+      const itemPrice = detailItem.salePrice ?? detailItem.price;
+      return item.quantity * itemPrice + acc;
+    }, 0);
   const kentuckyStateTax = 0.06 * subTotal;
   const total = kentuckyStateTax + subTotal;
   const isOrderSubmittable = zipcode.length === 5 && name.trim();
@@ -73,19 +103,27 @@ function Cart({ cart, items, dispatch }) {
             <form onSubmit={submitOrder}>
               <label htmlFor="name">
                 Name
-                <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+                <input type="text" id="name" value={name} onChange={(e) => onNameChange(e.target.value)} required />
               </label>
               <label htmlFor="phone">
                 Phone Number
-                <PatternFormat id="phone" displayType="input" type="tel" format="###-###-####" value={phone} onValueChange={(values) => setPhone(values.formattedValue)} />
+                <PatternFormat
+                  id="phone"
+                  displayType="input"
+                  type="tel"
+                  format="###-###-####"
+                  value={phone}
+                  onValueChange={(values) => onPhoneChange(values.formattedValue)}
+                  aria-label="Enter your phone number. After it is entered, you will automatically be moved to the next field."
+                />
               </label>
               <label htmlFor="zipcode">
                 ZIP Code
-                <input type="text" id="zipcode" maxLength="5" inputMode="numeric" value={zipcode} onChange={(e) => setZipcode(e.target.value)} required />
+                <input type="text" id="zipcode" maxLength="5" inputMode="numeric" value={zipcode} onChange={(e) => setZipcode(e.target.value)} ref={zipcodeRef} required />
               </label>
               <label htmlFor="couponCode">
                 Coupon Code
-                <input type="text" id="couponCode" value={couponCode} onChange={(e) => setFormattedCouponCode(e.target.value)} />
+                <input type="text" id="couponCode" value={couponCode} onChange={(e) => onCouponCodeChange(e.target.value)} />
               </label>
               <button id="submitButton" type="submit" disabled={!isOrderSubmittable}>Order Now</button>
             </form>
