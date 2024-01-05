@@ -11,7 +11,7 @@ import RewardsItem from './components/RewardsItem';
 import Cart from './components/Cart';
 import { initialCartState, cartReducer, CartTypes } from './reducers/cartReducer';
 
-const storageKey = 'cart';
+const cartStorageKey = 'cart';
 
 function App() {
   const [items, setItems] = useState([]);
@@ -19,7 +19,7 @@ function App() {
     cartReducer,
     initialCartState,
     (initialState) => {
-      const storedCartJson = localStorage.getItem(storageKey);
+      const storedCartJson = localStorage.getItem(cartStorageKey);
       if (storedCartJson !== null) {
         try {
           return JSON.parse(storedCartJson);
@@ -39,7 +39,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(cart));
+    localStorage.setItem(cartStorageKey, JSON.stringify(cart));
   }, [cart]);
 
   return (

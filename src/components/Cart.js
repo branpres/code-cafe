@@ -5,6 +5,7 @@ import axios from 'axios';
 import ItemType from '../types/item';
 import './Cart.css';
 import CartRow from './CartRow';
+import { CartTypes } from '../reducers/cartReducer';
 
 function Cart({ cart, items, dispatch }) {
   const [name, setName] = useState('');
@@ -12,6 +13,8 @@ function Cart({ cart, items, dispatch }) {
   const [zipcode, setZipcode] = useState('');
   const [couponCode, setCouponCode] = useState('');
   const [isEmployeeOfTheMonth, setIsEmployeeOfTheMonth] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const debounceRef = useRef(null);
   const zipcodeRef = useRef(null);
   const nameRef = useRef(null);
@@ -61,16 +64,35 @@ function Cart({ cart, items, dispatch }) {
     }, 0);
   const kentuckyStateTax = 0.06 * subTotal;
   const total = kentuckyStateTax + subTotal;
-  const isOrderSubmittable = zipcode.length === 5 && name.trim();
+  const isOrderSubmittable = zipcode.length === 5 && name.trim() && !isSubmitting;
 
-  const submitOrder = (e) => {
+  const submitOrder = async (e) => {
     e.preventDefault();
-    axios.post('/api/orders', {
-      items: cart,
-      name,
-      phone,
-      zipCode: zipcode,
-    });
+    setIsSubmitting(true);
+    try {
+      await axios.post('/api/orders', {
+        items: cart,
+        name,
+        phone,
+        zipCode: zipcode,
+      });
+      console.log('Order submitted');
+      dispatch({ type: CartTypes.PURGE });
+      setName('');
+      setPhone('');
+      setZipcode('');
+
+      try {
+        const result = await axios.get('/api/orders');
+        console.log('Place in line: ', result.data.length);
+      } catch (error) {
+        console.log('Error getting orders', error);
+      }
+    } catch (error) {
+      console.log('Error submitting the order', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
