@@ -5,7 +5,7 @@ export const CartTypes = {
   REMOVE: 'remove',
   DECREASE: 'decrease',
   SET: 'set',
-  PURGE: 'purge',
+  EMPTY: 'empty',
 };
 
 const findItem = (cart, itemId) => cart.find((item) => item.itemId === itemId);
@@ -45,8 +45,8 @@ export const cartReducer = (state, action) => {
           ? { ...item, quantity: action.quantity }
           : item
       ));
-    case CartTypes.PURGE:
-      return initialCartState;
+    case CartTypes.EMPTY:
+      return [];
     default:
       throw new Error(`Invalid action type ${action.type}`);
   }

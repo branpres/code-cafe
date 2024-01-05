@@ -6,6 +6,7 @@ import ItemType from '../types/item';
 import './Cart.css';
 import CartRow from './CartRow';
 import { CartTypes } from '../reducers/cartReducer';
+import Alert from './Alert';
 
 function Cart({ cart, items, dispatch }) {
   const [name, setName] = useState('');
@@ -14,6 +15,8 @@ function Cart({ cart, items, dispatch }) {
   const [couponCode, setCouponCode] = useState('');
   const [isEmployeeOfTheMonth, setIsEmployeeOfTheMonth] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   const debounceRef = useRef(null);
   const zipcodeRef = useRef(null);
@@ -69,6 +72,7 @@ function Cart({ cart, items, dispatch }) {
   const submitOrder = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setApiError('');
     try {
       await axios.post('/api/orders', {
         items: cart,
@@ -76,8 +80,8 @@ function Cart({ cart, items, dispatch }) {
         phone,
         zipCode: zipcode,
       });
-      console.log('Order submitted');
-      dispatch({ type: CartTypes.PURGE });
+      setShowSuccessAlert(true);
+      dispatch({ type: CartTypes.EMPTY });
       setName('');
       setPhone('');
       setZipcode('');
@@ -87,9 +91,11 @@ function Cart({ cart, items, dispatch }) {
         console.log('Place in line: ', result.data.length);
       } catch (error) {
         console.log('Error getting orders', error);
+        setApiError(error?.response?.data?.error || 'Unknown Error');
       }
     } catch (error) {
       console.log('Error submitting the order', error);
+      setApiError(error?.response?.data?.error || 'Unknown Error');
     } finally {
       setIsSubmitting(false);
     }
@@ -97,6 +103,12 @@ function Cart({ cart, items, dispatch }) {
 
   return (
     <div className="cart-component">
+      <Alert visible={showSuccessAlert} type="success">Thank you for your order.</Alert>
+      <Alert visible={!!apiError} type="error">
+        <p>There was an error submitting your order.</p>
+        <p>{apiError}</p>
+        <p>Please try again.</p>
+      </Alert>
       <h2>Your Cart</h2>
       {cart.length === 0
         ? <div>Your cart is empty.</div>
