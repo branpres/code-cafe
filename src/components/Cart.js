@@ -65,6 +65,12 @@ function Cart({ cart, items, dispatch }) {
 
   const submitOrder = (e) => {
     e.preventDefault();
+    axios.post('/api/orders', {
+      items: cart,
+      name,
+      phone,
+      zipCode: zipcode,
+    });
   };
 
   return (
