@@ -14,6 +14,7 @@ function Cart({ cart, items, dispatch }) {
   const [isEmployeeOfTheMonth, setIsEmployeeOfTheMonth] = useState(false);
   const debounceRef = useRef(null);
   const zipcodeRef = useRef(null);
+  const nameRef = useRef(null);
 
   const onPhoneChange = (newPhone) => {
     setPhone(newPhone);
@@ -41,6 +42,14 @@ function Cart({ cart, items, dispatch }) {
         .then((response) => setIsEmployeeOfTheMonth(response?.data?.isEmployeeOfTheMonth))
         .catch(console.error);
     }, 300);
+  };
+
+  const onZipcodeChange = (newZipcode) => {
+    setZipcode(newZipcode);
+
+    if (newZipcode.length === 5 && !name.trim()) {
+      nameRef.current.focus();
+    }
   };
 
   const subTotal = isEmployeeOfTheMonth
@@ -103,7 +112,7 @@ function Cart({ cart, items, dispatch }) {
             <form onSubmit={submitOrder}>
               <label htmlFor="name">
                 Name
-                <input type="text" id="name" value={name} onChange={(e) => onNameChange(e.target.value)} required />
+                <input type="text" id="name" value={name} onChange={(e) => onNameChange(e.target.value)} ref={nameRef} required />
               </label>
               <label htmlFor="phone">
                 Phone Number
@@ -119,7 +128,7 @@ function Cart({ cart, items, dispatch }) {
               </label>
               <label htmlFor="zipcode">
                 ZIP Code
-                <input type="text" id="zipcode" maxLength="5" inputMode="numeric" value={zipcode} onChange={(e) => setZipcode(e.target.value)} ref={zipcodeRef} required />
+                <input type="text" id="zipcode" maxLength="5" inputMode="numeric" value={zipcode} onChange={(e) => onZipcodeChange(e.target.value)} ref={zipcodeRef} required />
               </label>
               <label htmlFor="couponCode">
                 Coupon Code
