@@ -4,6 +4,7 @@ import Logo from '../images/logo.svg';
 import CartIcon from '../images/cart.svg';
 import './Header.css';
 import RewardsLink from './RewardsLink';
+import UserDetails from './UserDetails';
 
 function Header({ title, cart }) {
   const cartQuantity = cart.reduce((accumulator, item) => accumulator + item.quantity, 0);
@@ -20,6 +21,7 @@ function Header({ title, cart }) {
           <img src={CartIcon} alt="Cart" />
           <div className="badge">{cartQuantity}</div>
         </Link>
+        <UserDetails />
       </div>
     </header>
   );
