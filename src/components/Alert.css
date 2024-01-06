@@ -16,3 +16,19 @@
     display: block;
     max-height: 900px;
 }
+
+.alert-component button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 100%;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+    float: right;
+  }
