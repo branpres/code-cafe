@@ -175,7 +175,7 @@ function Cart({ cart, items, dispatch }) {
                 Coupon Code
                 <input type="text" id="couponCode" value={couponCode} onChange={(e) => onCouponCodeChange(e.target.value)} />
               </label>
-              <button id="submitButton" type="submit" disabled={!isOrderSubmittable}>Order Now</button>
+              <button type="submit" disabled={!isOrderSubmittable}>Order Now</button>
             </form>
           </>
         )}
