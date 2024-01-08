@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import { PatternFormat } from 'react-number-format';
 import axios from 'axios';
-import ItemType from '../types/item';
 import './Cart.css';
 import CartRow from './CartRow';
 import { CartTypes } from '../reducers/cartReducer';
 import Alert from './Alert';
 import CloseableAlert from './CloseableAlert';
+import ItemsContext from '../contexts/ItemsContext';
 
-function Cart({ cart, items, dispatch }) {
+function Cart({ cart, dispatch }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [zipcode, setZipcode] = useState('');
@@ -22,6 +22,8 @@ function Cart({ cart, items, dispatch }) {
   const debounceRef = useRef(null);
   const zipcodeRef = useRef(null);
   const nameRef = useRef(null);
+
+  const { items } = useContext(ItemsContext);
 
   const onPhoneChange = (newPhone) => {
     setPhone(newPhone);
@@ -126,7 +128,7 @@ function Cart({ cart, items, dispatch }) {
               <tbody>
                 {
                 cart.map((item) => (
-                  <CartRow key={item.itemId} cartItem={item} items={items} dispatch={dispatch} />
+                  <CartRow key={item.itemId} cartItem={item} dispatch={dispatch} />
                 ))
               }
               </tbody>
@@ -188,7 +190,6 @@ Cart.propTypes = {
     itemId: PropTypes.string.isRequired,
     quantity: PropTypes.number.isRequired,
   })).isRequired,
-  items: PropTypes.arrayOf(ItemType).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 

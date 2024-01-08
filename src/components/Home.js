@@ -1,10 +1,12 @@
-import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import './Home.css';
 import Thumbnail from './Thumbnail';
 import { itemImages } from '../items';
-import ItemType from '../types/item';
+import ItemsContext from '../contexts/ItemsContext';
 
-function Home({ items }) {
+function Home() {
+  const { items } = useContext(ItemsContext);
+
   return (
     <div>
       <div className="home-component">
@@ -22,9 +24,5 @@ function Home({ items }) {
     </div>
   );
 }
-
-Home.propTypes = {
-  items: PropTypes.arrayOf(ItemType).isRequired,
-};
 
 export default Home;

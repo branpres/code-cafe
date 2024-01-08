@@ -14,6 +14,7 @@ import Cart from './components/Cart';
 import { initialCartState, cartReducer, CartTypes } from './reducers/cartReducer';
 import CurrentUserContext from './contexts/CurrentUserContext';
 import Login from './components/Login';
+import ItemsContext from './contexts/ItemsContext';
 
 const cartStorageKey = 'cart';
 
@@ -54,28 +55,31 @@ function App() {
   }, [cart]);
 
   const currentUserContextValue = useMemo(() => ({ currentUser, setCurrentUser }), [currentUser]);
+  const itemsContextValue = useMemo(() => ({ items }), [items]);
 
   return (
     <Router>
       <CurrentUserContext.Provider value={currentUserContextValue}>
         <Header title="Brandon's Code Cafe" cart={cart} />
-        {items.length === 0
-          ? <div>Loading...</div>
-          : (
-            <Routes>
-              <Route path="/" element={<Home items={items} />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<NotFound />} />
-              <Route path="/details" element={<Details items={items} />}>
-                <Route path=":id" element={<DetailItem items={items} addToCart={addToCart} />} />
-                <Route index element={<div>No Item Selected</div>} />
-              </Route>
-              <Route path="/rewards" element={<Rewards />}>
-                <Route path=":tier" element={<RewardsItem />} />
-              </Route>
-              <Route path="/cart" element={<Cart cart={cart} items={items} dispatch={dispatch} />} />
-            </Routes>
-          )}
+        <ItemsContext.Provider value={itemsContextValue}>
+          {itemsContextValue.items.length === 0
+            ? <div>Loading...</div>
+            : (
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="*" element={<NotFound />} />
+                <Route path="/details" element={<Details />}>
+                  <Route path=":id" element={<DetailItem addToCart={addToCart} />} />
+                  <Route index element={<div>No Item Selected</div>} />
+                </Route>
+                <Route path="/rewards" element={<Rewards />}>
+                  <Route path=":tier" element={<RewardsItem />} />
+                </Route>
+                <Route path="/cart" element={<Cart cart={cart} dispatch={dispatch} />} />
+              </Routes>
+            )}
+        </ItemsContext.Provider>
       </CurrentUserContext.Provider>
     </Router>
   );

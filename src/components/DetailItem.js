@@ -1,11 +1,13 @@
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
 import './DetailItem.css';
-import ItemType from '../types/item';
 import { itemImages } from '../items';
+import ItemsContext from '../contexts/ItemsContext';
 
-function DetailItem({ items, addToCart }) {
+function DetailItem({ addToCart }) {
   const { id } = useParams();
+  const { items } = useContext(ItemsContext);
   const detailItem = items.find((item) => item.itemId === id);
 
   const addItemToCart = () => {
@@ -34,7 +36,6 @@ function DetailItem({ items, addToCart }) {
 }
 
 DetailItem.propTypes = {
-  items: PropTypes.arrayOf(ItemType).isRequired,
   addToCart: PropTypes.func.isRequired,
 };
 

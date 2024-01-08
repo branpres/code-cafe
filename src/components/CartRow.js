@@ -1,8 +1,10 @@
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
-import ItemType from '../types/item';
 import { CartTypes } from '../reducers/cartReducer';
+import ItemsContext from '../contexts/ItemsContext';
 
-function CartRow({ cartItem, items, dispatch }) {
+function CartRow({ cartItem, dispatch }) {
+  const { items } = useContext(ItemsContext);
   const item = items.find((i) => i.itemId === cartItem.itemId);
 
   const increaseItemQuantityInCart = () => dispatch({ type: CartTypes.ADD, itemId: item.itemId });
@@ -32,7 +34,6 @@ CartRow.propTypes = {
     itemId: PropTypes.string.isRequired,
     quantity: PropTypes.number.isRequired,
   }).isRequired,
-  items: PropTypes.arrayOf(ItemType).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 

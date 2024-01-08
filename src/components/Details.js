@@ -1,11 +1,13 @@
-import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import { Outlet } from 'react-router';
 import './Details.css';
 import Thumbnail from './Thumbnail';
 import { itemImages } from '../items';
-import ItemType from '../types/item';
+import ItemsContext from '../contexts/ItemsContext';
 
-function Details({ items }) {
+function Details() {
+  const { items } = useContext(ItemsContext);
+
   return (
     <div className="details-component">
       <Outlet />
@@ -24,9 +26,5 @@ function Details({ items }) {
     </div>
   );
 }
-
-Details.propTypes = {
-  items: PropTypes.arrayOf(ItemType).isRequired,
-};
 
 export default Details;
