@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Logo from '../images/logo.svg';
 import CartIcon from '../images/cart.svg';
 import './Header.css';
-import RewardsLink from './RewardsLink';
 import UserDetails from './UserDetails';
 
 function Header({ title, cart }) {
@@ -16,7 +15,6 @@ function Header({ title, cart }) {
         <h1>{title}</h1>
       </Link>
       <div className="menu">
-        <RewardsLink />
         <Link to="/cart">
           <img src={CartIcon} alt="Cart" />
           <div className="badge">{cartQuantity}</div>

@@ -14,6 +14,7 @@ import Cart from './components/Cart';
 import { initialCartState, cartReducer, CartTypes } from './reducers/cartReducer';
 import CurrentUserContext from './contexts/CurrentUserContext';
 import Login from './components/Login';
+import Orders from './components/Orders';
 
 const cartStorageKey = 'cart';
 
@@ -74,6 +75,7 @@ function App() {
                 <Route path=":tier" element={<RewardsItem />} />
               </Route>
               <Route path="/cart" element={<Cart cart={cart} items={items} dispatch={dispatch} />} />
+              <Route path="/orders" element={<Orders items={items} />} />
             </Routes>
           )}
       </CurrentUserContext.Provider>
