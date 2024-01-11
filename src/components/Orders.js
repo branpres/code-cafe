@@ -3,24 +3,41 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import ItemType from '../types/item';
 import './Orders.css';
+import { useCurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Orders({ items }) {
   const [orders, setOrders] = useState([]);
-
-  const loadOrders = () => {
-    axios.get('/api/orders')
-      .then((result) => setOrders(result.data))
-      .catch(console.error);
-  };
+  const { currentUser } = useCurrentUserContext();
 
   useEffect(() => {
-    loadOrders();
-  }, []);
+    if (currentUser.access === 'associate') {
+      const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+      const ws = new WebSocket(`${(protocol)}${window.location.host}/ws-cafe`);
+      ws.onopen = () => {
+        console.log('connected');
+      };
+      ws.onerror = (event) => {
+        console.error(event);
+      };
+      ws.onmessage = (message) => {
+        const newOrders = JSON.parse(message.data);
+        setOrders(newOrders);
+      };
+      ws.onclose = () => {
+        console.log('disconnected');
+      };
+
+      return () => {
+        ws.close();
+        setOrders([]);
+      };
+    }
+    return () => {};
+  }, [currentUser]);
 
   const deleteOrder = async (orderId) => {
     try {
       axios.delete(`/api/orders/${orderId}`);
-      loadOrders();
     } catch (error) {
       console.error(error);
     }
@@ -30,7 +47,11 @@ function Orders({ items }) {
     <div className="orders-component">
       <h2>Orders</h2>
       {orders.length === 0
-        ? <div>No orders</div>
+        ? (
+          <div>
+            {currentUser.access === 'associate' ? 'No orders' : 'Access denied'}
+          </div>
+        )
         : orders.map((order) => (
           <div className="order" key={order.id}>
             <table>

@@ -14,7 +14,7 @@ function UserDetails() {
     try {
       await axios.post('/api/auth/logout', {});
       setCurrentUser({});
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       console.error(error);
     }

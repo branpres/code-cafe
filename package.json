@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "eslint-config-airbnb": "^19.0.4",
+    "http-proxy-middleware": "^2.0.1",
     "prop-types": "^15.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,7 +24,6 @@
     "eject": "react-scripts eject",
     "lint": "eslint src --max-warnings=0"
   },
-  "proxy": "http://localhost:3030",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -45,9 +45,14 @@
       "no-console": "off",
       "import/no-extraneous-dependencies": "off",
       "max-len": "off",
-      "jsx-a11y/label-has-associated-control": [ 2, {
-        "controlComponents": ["PatternFormat"]
-      }]
+      "jsx-a11y/label-has-associated-control": [
+        2,
+        {
+          "controlComponents": [
+            "PatternFormat"
+          ]
+        }
+      ]
     }
   },
   "browserslist": {
