@@ -9,6 +9,7 @@ import { useCurrentUserContext } from '../contexts/CurrentUserContext';
 function Orders({ items }) {
   const [orders, setOrders] = useState([]);
   const [deleteOrderError, setDeleteOrderError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const { currentUser } = useCurrentUserContext();
 
   useEffect(() => {
@@ -24,6 +25,7 @@ function Orders({ items }) {
       ws.onmessage = (message) => {
         const newOrders = JSON.parse(message.data);
         setOrders(newOrders);
+        setIsLoading(false);
       };
       ws.onclose = () => {
         console.log('disconnected');
@@ -46,6 +48,15 @@ function Orders({ items }) {
     }
   };
 
+  let orderLengthZeroText = 'Access denied';
+  if (currentUser.access === 'associate') {
+    if (isLoading) {
+      orderLengthZeroText = 'Loading...';
+    } else {
+      orderLengthZeroText = 'No Orders';
+    }
+  }
+
   return (
     <div className="orders-component">
       <h2>Orders</h2>
@@ -56,9 +67,7 @@ function Orders({ items }) {
       </CloseableAlert>
       {orders.length === 0
         ? (
-          <div>
-            {currentUser.access === 'associate' ? 'No orders' : 'Access denied'}
-          </div>
+          <div>{orderLengthZeroText}</div>
         )
         : orders.map((order) => (
           <div className="order" key={order.id}>
