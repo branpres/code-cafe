@@ -1,12 +1,11 @@
-import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Profile from '../images/profile.svg';
 import './UserDetails.css';
-import CurrentUserContext from '../contexts/CurrentUserContext';
+import { useCurrentUserContext } from '../contexts/CurrentUserContext';
 
 function UserDetails() {
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  const { currentUser, setCurrentUser } = useCurrentUserContext();
 
   const navigate = useNavigate();
 

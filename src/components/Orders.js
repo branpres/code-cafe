@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import ItemType from '../types/item';
+import CloseableAlert from './CloseableAlert';
 import './Orders.css';
 import { useCurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Orders({ items }) {
   const [orders, setOrders] = useState([]);
+  const [deleteOrderError, setDeleteOrderError] = useState('');
   const { currentUser } = useCurrentUserContext();
 
   useEffect(() => {
@@ -40,12 +42,18 @@ function Orders({ items }) {
       axios.delete(`/api/orders/${orderId}`);
     } catch (error) {
       console.error(error);
+      setDeleteOrderError(error?.response?.data?.error || 'Unknown Error');
     }
   };
 
   return (
     <div className="orders-component">
       <h2>Orders</h2>
+      <CloseableAlert visible={!!deleteOrderError} type="error" onClose={() => setDeleteOrderError('')}>
+        <p>There was an error deleting the order.</p>
+        <p>{deleteOrderError}</p>
+        <p>Please try again.</p>
+      </CloseableAlert>
       {orders.length === 0
         ? (
           <div>

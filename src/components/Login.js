@@ -1,13 +1,13 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
-import CurrentUserContext from '../contexts/CurrentUserContext';
 import CloseableAlert from './CloseableAlert';
 import './Alert.css';
+import { useCurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Login() {
-  const { setCurrentUser } = useContext(CurrentUserContext);
+  const { setCurrentUser } = useCurrentUserContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [apiError, setApiError] = useState('');
