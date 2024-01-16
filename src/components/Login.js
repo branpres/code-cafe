@@ -19,7 +19,12 @@ function Login() {
     try {
       const result = await axios.post('/api/auth/login', { username, password });
       setCurrentUser(result.data);
-      navigate('/');
+
+      if (result.data.access === 'associate' && result.data.username === 'Manager') {
+        navigate('/orders');
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       console.error(error);
       setApiError(error?.response?.data?.error || 'Unknown Error');
