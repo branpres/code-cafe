@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Outlet } from 'react-router';
 import './Details.css';
@@ -29,4 +30,4 @@ Details.propTypes = {
   items: PropTypes.arrayOf(ItemType).isRequired,
 };
 
-export default Details;
+export default memo(Details);

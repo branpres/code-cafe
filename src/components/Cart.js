@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { PatternFormat } from 'react-number-format';
 import axios from 'axios';
 import ItemType from '../types/item';
@@ -59,15 +59,16 @@ function Cart({ cart, items, dispatch }) {
     }
   };
 
-  const subTotal = isEmployeeOfTheMonth
+  const subTotal = useMemo(() => (isEmployeeOfTheMonth
     ? 0
     : cart.reduce((acc, item) => {
       const detailItem = items.find((i) => i.itemId === item.itemId);
       const itemPrice = detailItem.salePrice ?? detailItem.price;
       return item.quantity * itemPrice + acc;
-    }, 0);
-  const kentuckyStateTax = 0.06 * subTotal;
-  const total = kentuckyStateTax + subTotal;
+    }, 0)), [isEmployeeOfTheMonth, cart, items]);
+  const kentuckyStateTax = useMemo(() => 0.06 * subTotal, [subTotal]);
+  const total = useMemo(() => kentuckyStateTax + subTotal, [kentuckyStateTax, subTotal]);
+
   const isOrderSubmittable = zipcode.length === 5 && name.trim() && !isSubmitting;
 
   const submitOrder = async (e) => {

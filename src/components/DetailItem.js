@@ -1,11 +1,11 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
 import './DetailItem.css';
 import ItemType from '../types/item';
 import { itemImages } from '../items';
 
-function DetailItem({ items, addToCart }) {
-  const { id } = useParams();
+function DetailItem({ id, items, addToCart }) {
   const detailItem = items.find((item) => item.itemId === id);
 
   const addItemToCart = () => {
@@ -33,9 +33,25 @@ function DetailItem({ items, addToCart }) {
   );
 }
 
-DetailItem.propTypes = {
+const sharedProps = {
   items: PropTypes.arrayOf(ItemType).isRequired,
   addToCart: PropTypes.func.isRequired,
 };
 
-export default DetailItem;
+DetailItem.propTypes = {
+  ...sharedProps,
+  id: PropTypes.string.isRequired,
+};
+
+const DetailItemMemo = memo(DetailItem);
+
+function DetailsItemWrapper({ items, addToCart }) {
+  const { id } = useParams();
+  return (
+    <DetailItemMemo id={id} items={items} addToCart={addToCart} />
+  );
+}
+
+DetailsItemWrapper.propTypes = sharedProps;
+
+export default DetailsItemWrapper;
