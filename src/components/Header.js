@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Logo from '../images/logo.svg';
@@ -7,6 +8,8 @@ import UserDetails from './UserDetails';
 
 function Header({ title, cart }) {
   const cartQuantity = cart.reduce((accumulator, item) => accumulator + item.quantity, 0);
+
+  const UserDetailsMemo = memo(UserDetails);
 
   return (
     <header className="header-component">
@@ -19,7 +22,7 @@ function Header({ title, cart }) {
           <img src={CartIcon} alt="Cart" />
           <div className="badge">{cartQuantity}</div>
         </Link>
-        <UserDetails />
+        <UserDetailsMemo />
       </div>
     </header>
   );
